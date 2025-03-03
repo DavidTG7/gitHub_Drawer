@@ -9,15 +9,17 @@ $cell-colors: (
 );
 
 .cell {
-    width: 50px;
+    width: 10px;
     aspect-ratio: 1;
-    border-radius: 5px;
+    border-radius: 2px;
+    opacity: .5;
+    outline-offset: -1px;
     cursor: pointer;
 }
 
 @for $i from 1 through 5 {
     .cell.level-#{$i} {
         background-color: map.get(map.get($cell-colors, $i), background);
-        border: 2px solid map.get(map.get($cell-colors, $i), border);
+        outline: 1px solid map.get(map.get($cell-colors, $i), border);
     }
 }

@@ -1,61 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cell from "./components/Cell/Cell";
 
 const App = () => {
-  const [cellClicks, setCellClicks] = useState({
-    id: new Date(),
-    clicks: 1
-  })
-
-  const [pressTimeout, setPressTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
-
-
-  console.log(cellClicks);
-
-  const handlePlus = () => {
-    if (cellClicks.clicks < 5) {
-      setCellClicks(prev => ({ ...prev, clicks: prev.clicks + 1 }))
+  const [cellClicks, setCellClicks] = useState<{ id: number, clicks: number }[]>([
+    {
+      id: 1,
+      clicks: 1
+    },
+    {
+      id: 2,
+      clicks: 1
     }
-  }
+  ]);
 
-  const handleMinus = (e: any) => {
-    e.preventDefault()
-    if (cellClicks.clicks > 1) {
-      setCellClicks(prev => ({ ...prev, clicks: prev.clicks - 1 }))
+  const [isMouseDown, setIsMouseDown] = useState(false)
+  const [mouseButton, setMouseButton] = useState<number | null>(null)
+
+  useEffect(() => {
+    const handleMouseDown = (e: MouseEvent) => {
+      setIsMouseDown(true)
+      setMouseButton(e.button)
     }
-  }
 
-
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const timeout = setTimeout(() => {
-      setCellClicks((prev) => ({
-        ...prev,
-        clicks: e.button === 0 ? 5 : 1
-      }))
-      setPressTimeout(null)
-    }, 1000)
-
-    setPressTimeout(timeout)
-  }
-
-  const handleMouseUp = () => {
-    if (pressTimeout) {
-      clearTimeout(pressTimeout)
-      setPressTimeout(null)
+    const handleMouseUp = () => {
+      setIsMouseDown(false)
+      setMouseButton(null)
     }
-  }
 
+    document.addEventListener("mousedown", handleMouseDown)
+    document.addEventListener("mouseup", handleMouseUp)
+
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown)
+      document.removeEventListener("mouseup", handleMouseUp)
+    }
+  }, [])
 
   return (
     <>
       Hello App!
       <Cell
-        handlePlus={handlePlus}
-        handleMinus={handleMinus}
-        handleMouseDown={handleMouseDown}
-        handleMouseUp={handleMouseUp}
         cellClicks={cellClicks}
+        setCellClicks={setCellClicks}
+        isMouseDown={isMouseDown}
+        mouseButton={mouseButton}
       />
     </>
   )
