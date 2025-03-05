@@ -1,11 +1,40 @@
+import { useEffect, useState } from "react";
 import styles from "./Cell.module.scss";
 
-const Cell = ({ cellClicks, setCellClicks, isMouseDown, mouseButton }: {
-    cellClicks: { id: number; clicks: number }[]
+interface CellProps {
+    id: number
+    clicks: number
+}
+
+interface CellComponentProps {
+    cellClicks: CellProps[]
     setCellClicks: React.Dispatch<React.SetStateAction<{ id: number; clicks: number }[]>>
-    isMouseDown: boolean
-    mouseButton: number | null
-}) => {
+}
+
+const Cell = ({ cellClicks, setCellClicks }: CellComponentProps) => {
+
+    const [isMouseDown, setIsMouseDown] = useState(false)
+    const [mouseButton, setMouseButton] = useState<number | null>(null)
+
+    useEffect(() => {
+        const handleMouseDown = (e: MouseEvent) => {
+            setIsMouseDown(true)
+            setMouseButton(e.button)
+        }
+
+        const handleMouseUp = () => {
+            setIsMouseDown(false)
+            setMouseButton(null)
+        }
+
+        document.addEventListener("mousedown", handleMouseDown)
+        document.addEventListener("mouseup", handleMouseUp)
+
+        return () => {
+            document.removeEventListener("mousedown", handleMouseDown)
+            document.removeEventListener("mouseup", handleMouseUp)
+        }
+    }, [])
 
     const updateCellClicks = (id: number, action: "increment" | "decrement") => {
         setCellClicks((prev) =>
@@ -34,22 +63,23 @@ const Cell = ({ cellClicks, setCellClicks, isMouseDown, mouseButton }: {
 
     const handleMouseEnter = (id: number) => {
         if (!isMouseDown || mouseButton === null) return
-        if (mouseButton === 0) updateCellClicks(id, "increment")
-        if (mouseButton === 2) updateCellClicks(id, "decrement")
+
+        if (mouseButton === 0) {
+            updateCellClicks(id, "increment")
+        } else if (mouseButton === 2) {
+            updateCellClicks(id, "decrement")
+        }
     }
 
     return (
         <>
-            {cellClicks.map((cell) =>
-                <div
-                    key={cell.id}
-                    className={`${styles.cell} ${styles[`level-${String(cell.clicks)}`]}`}
-                    onClick={() => handleLeftClick(cell.id)}
-                    onContextMenu={(e) => handleRightClick(e, cell.id)}
-                    onMouseEnter={() => handleMouseEnter(cell.id)}
-                >
-                </div>
-            )}
+            <div
+                className={`${styles.cell} ${styles[`level-${String(cellClicks[1].clicks)}`]}`}
+                onClick={() => handleLeftClick(cellClicks[1].id)}
+                onContextMenu={(e) => handleRightClick(e, cellClicks[1].id)}
+                onMouseEnter={() => handleMouseEnter(cellClicks[1].id)}
+            >
+            </div>
         </>
     )
 }
