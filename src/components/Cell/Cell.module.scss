@@ -1,8 +1,25 @@
+@use "sass:map";
+
+$cell-colors: (
+    1: (background: #161b22, border: #171b22),
+    2: (background: #0e4429, border: #1a4e34),
+    3: (background: #006d32, border: #0d743c),
+    4: (background: #26a641, border: #31ab4b),
+    5: (background: #39d353, border: #43d55c)
+);
+
 .cell {
-    border: solid 1px black;
-    width: 50px;
+    width: 10px;
     aspect-ratio: 1;
-    background-color: #39d353;
-    border-radius: 5px;
+    border-radius: 2px;
+    opacity: .5;
+    outline-offset: -1px;
     cursor: pointer;
+}
+
+@for $i from 1 through 5 {
+    .cell.level-#{$i} {
+        background-color: map.get(map.get($cell-colors, $i), background);
+        outline: 1px solid map.get(map.get($cell-colors, $i), border);
+    }
 }
