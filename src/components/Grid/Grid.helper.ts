@@ -27,3 +27,7 @@ export const generateYearGrid = (year: number) => {
 const isLeapYear = (year: number) => {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
+
+export const getDayOfWeek = (dateString: string): number => {
+  return new Date(dateString).getDay();
+};
