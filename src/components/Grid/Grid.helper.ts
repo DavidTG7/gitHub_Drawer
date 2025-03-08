@@ -13,11 +13,11 @@ export const generateYearGrid = (year: number) => {
   for (let i = 0; i < daysInYear; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
-    const dateKey = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const dateKey = date.toISOString().split('T')[0];
 
     grid[dateKey] = {
       id: i + 1,
-      clicks: 0, // Valor inicial
+      clicks: 0,
     };
   }
 
@@ -27,7 +27,3 @@ export const generateYearGrid = (year: number) => {
 const isLeapYear = (year: number) => {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
-
-//   // Ejemplo de uso
-//   const yearGrid = generateYearGrid(2025);
-//   console.log(yearGrid);
