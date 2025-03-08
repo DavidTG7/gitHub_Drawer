@@ -1,10 +1,7 @@
-import styles from "./Cell.module.scss";
+import styles from './Cell.module.scss';
 
 const Cell = () => {
-    return(
-        <div className={styles.cell}>
-        </div>
-    )
-}
+  return <div className={styles.cell}></div>;
+};
 
 export default Cell;

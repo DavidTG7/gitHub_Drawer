@@ -1,12 +1,12 @@
-import Cell from "./components/Cell/Cell";
+import Cell from './components/Cell/Cell';
 
-const  App = () => {
+const App = () => {
   return (
     <>
       Hello App!
       <Cell />
     </>
-  )
-}
+  );
+};
 
 export default App;
